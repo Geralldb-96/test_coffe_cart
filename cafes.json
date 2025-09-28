@@ -1,0 +1,38 @@
+[
+    {
+        "nombre": "Espresso\n$10.00",
+        "precio": "espresso"
+    },
+    {
+        "nombre": "Espresso Macchiato\n$12.00",
+        "precio": "espresso\nmilk foam"
+    },
+    {
+        "nombre": "Cappuccino\n$19.00",
+        "precio": "espresso\nsteamed milk\nmilk foam"
+    },
+    {
+        "nombre": "Mocha\n$8.00",
+        "precio": "espresso\nchocolate syrup\nsteamed milk\nwhipped cream"
+    },
+    {
+        "nombre": "Flat White\n$18.00",
+        "precio": "espresso\nsteamed milk"
+    },
+    {
+        "nombre": "Americano\n$7.00",
+        "precio": "espresso\nwater"
+    },
+    {
+        "nombre": "Cafe Latte\n$16.00",
+        "precio": "espresso\nsteamed milk\nmilk foam"
+    },
+    {
+        "nombre": "Espresso Con Panna\n$14.00",
+        "precio": "espresso\nwhipped cream"
+    },
+    {
+        "nombre": "Cafe Breve\n$15.00",
+        "precio": "espresso\nsteamed milk\nsteamed cream\nmilk foam"
+    }
+]
