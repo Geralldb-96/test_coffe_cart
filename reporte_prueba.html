@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Prueba - Coffee Cart</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #4CAF50; }
+        .error { color: red; }
+        .exito { color: green; }
+        img { margin: 10px 0; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Prueba Automatizada</h1>
+    <p><strong>Fecha:</strong> 29/09/2025 18:16</p>
+    <p><strong>URL:</strong> <a href="https://coffee-cart.app/">https://coffee-cart.app/</a></p>
+
+    <h2>Cafés seleccionados (aleatorio = 7):</h2>
+    <ul>
+<li>Espresso: $10.00</li>
+<li>Espresso Macchiato: $12.00</li>
+<li>Cappuccino: $19.00</li>
+<li>Mocha: $8.00</li>
+<li>Flat White: $18.00</li>
+<li>Americano: $7.00</li>
+<li>Cafe Latte: $16.00</li>
+</ul>
+    <h2>Acciones realizadas:</h2>
+    <ul>
+        <li>Se agregaron los cafés al carrito</li>
+        <li>Se validó su presencia en el carrito</li>
+        <li>Se modificaron las cantidades a valores aleatorios (2–10)</li>
+        <li>Se eliminó aleatoriamente usando ❌: </li>
+        <li>Se validó que el café eliminado ya no esté en el carrito</li>
+    </ul>
+<p class='error'><strong>Resultado:</strong> ❌ Fallos detectados</p>
+<h3>Errores:</h3><ul>
+<li>❌ Error al modificar cantidades dinámicas: Message: 
+</li>
+<li>❌ Error al eliminar producto: No se encontraron filas de productos en el carrito
+assert []</li>
+</ul>
+
+        <h2>Capturas de pantalla:</h2>
+        <ul>
+            <li>Después de agregar cafés:<br><img src='capturas/agregado.png' width='400'></li>
+            <li>Después de modificar cantidades:<br><img src='capturas/modificado.png' width='400'></li>
+            <li>Después de eliminar café:<br><img src='capturas/eliminado.png' width='400'></li>
+        <li>Error:<br><img src='capturas\error_modificacion_carrito.png' width='400'></li>
+<li>Error:<br><img src='capturas\error_eliminacion.png' width='400'></li>
+
+        </ul>
+    </body>
+</html>

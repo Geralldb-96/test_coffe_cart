@@ -1,0 +1,64 @@
+=== REPORTE DE PRUEBAS ===
+
+Fecha: 29/09/2025 18:12
+URL: https://coffee-cart.app/
+
+Cafés seleccionados (4):
+- Espresso
+$10.00: espresso
+- Espresso Macchiato
+$12.00: espresso
+milk foam
+- Cappuccino
+$19.00: espresso
+steamed milk
+milk foam
+- Mocha
+$8.00: espresso
+chocolate syrup
+steamed milk
+whipped cream
+
+Acciones realizadas:
+- Se agregaron los cafés al carrito
+- Se validó su presencia en el carrito
+- Se modificaron las cantidades de manera aleatoria (2 a 10)
+- Se eliminó aleatoriamente: 
+- Se validó que el café eliminado ya no esté en el carrito
+
+Resultado: ❌ Fallos detectados
+Errores:
+- ❌ Validación de inserción falló: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff6fe9f1eb5+80197]
+	GetHandleVerifier [0x0x7ff6fe9f1f10+80288]
+	(No symbol) [0x0x7ff6fe7702fa]
+	(No symbol) [0x0x7ff6fe7c7cd7]
+	(No symbol) [0x0x7ff6fe7c7f9c]
+	(No symbol) [0x0x7ff6fe81ba87]
+	(No symbol) [0x0x7ff6fe7f03bf]
+	(No symbol) [0x0x7ff6fe8187fb]
+	(No symbol) [0x0x7ff6fe7f0153]
+	(No symbol) [0x0x7ff6fe7b8b02]
+	(No symbol) [0x0x7ff6fe7b98d3]
+	GetHandleVerifier [0x0x7ff6fecae83d+2949837]
+	GetHandleVerifier [0x0x7ff6feca8c6a+2926330]
+	GetHandleVerifier [0x0x7ff6fecc86c7+3055959]
+	GetHandleVerifier [0x0x7ff6fea0cfee+191102]
+	GetHandleVerifier [0x0x7ff6fea150af+224063]
+	GetHandleVerifier [0x0x7ff6fe9faf64+117236]
+	GetHandleVerifier [0x0x7ff6fe9fb119+117673]
+	GetHandleVerifier [0x0x7ff6fe9e10a8+11064]
+	BaseThreadInitThunk [0x0x7ffb8debe8d7+23]
+	RtlUserThreadStart [0x0x7ffb8e328d9c+44]
+
+- ❌ Error al modificar cantidades dinámicas: No se encontraron productos en el carrito para modificar
+assert []
+- ❌ Error al eliminar café: No se encontraron filas en carrito para eliminar
+assert []
+
+=== Capturas ===
+- capturas\01_agregado.png
+- capturas\02_error_insercion.png
+- capturas\03_modificado.png
+- capturas\04_eliminado.png
