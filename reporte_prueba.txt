@@ -1,6 +1,6 @@
 Prueba automatizada: Agregar, modificar y eliminar cafés
 
-Fecha de ejecución: 29/09/2025 18:16
+Fecha de ejecución: 30/09/2025 21:58
 URL: https://coffee-cart.app/
 
 Cafés seleccionados:
@@ -8,11 +8,8 @@ Cafés seleccionados:
 - Espresso Macchiato: $12.00
 - Cappuccino: $19.00
 - Mocha: $8.00
-- Flat White: $18.00
-- Americano: $7.00
-- Cafe Latte: $16.00
 
-Cantidad seleccionada: 7
+Cantidad seleccionada: 4
 
 Acciones realizadas:
 - Se agregaron los cafés al carrito
@@ -23,14 +20,10 @@ Acciones realizadas:
 
 Resultado: ❌ Fallos detectados
 Errores:
-❌ Error al modificar cantidades dinámicas: Message: 
-
 ❌ Error al eliminar producto: No se encontraron filas de productos en el carrito
 assert []
 
 Capturas guardadas en carpeta 'capturas':
 - capturas\agregado.png
-- capturas\error_modificacion_carrito.png
-- capturas\modificado.png
 - capturas\error_eliminacion.png
 - capturas\eliminado.png

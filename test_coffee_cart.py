@@ -75,7 +75,7 @@ def test_cafe_completo(driver):
             time.sleep(0.3)
         except Exception as e:
             errores.append(f"❌ Error al agregar café #{i+1}: {e}")
-    capturas.append(guardar_captura(driver, "agregado.png"))
+    capturas.append(guardar_captura(driver, "01_agregado.png"))
 
     # Ir al carrito
     try:
@@ -99,84 +99,83 @@ def test_cafe_completo(driver):
         errores.append(f"❌ Validación del carrito falló: {e}")
 
     # -----------------------
-    # Modificar cantidades (random entre 2 y 10 usando +)
+    # Modificar cantidades con + y -
     # -----------------------
     try:
-        filas = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "tr.cart_item")))
+        filas = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li.list-item")))
         assert filas, "No se encontraron productos en el carrito"
 
-        for fila in filas:
-            nombre = fila.find_element(By.CSS_SELECTOR, ".product-name").text
-            cantidad_deseada = random.randint(2, 10)
+        fila = random.choice(filas)
+        nombre = fila.find_element(By.CSS_SELECTOR, "div").text.strip()
+        print(f"➡️ Se trabajará sobre el producto: {nombre}")
 
-            input_cantidad = fila.find_element(By.CSS_SELECTOR, "input[type='number']")
-            valor_actual = int(input_cantidad.get_attribute("value"))
+        boton_mas = fila.find_element(By.CSS_SELECTOR, "button[aria-label^='Add one']")
+        boton_menos = fila.find_element(By.CSS_SELECTOR, "button[aria-label^='Remove one']")
+        span_cantidad = fila.find_element(By.CSS_SELECTOR, "span.unit-desc")
 
-            boton_mas = fila.find_element(By.CSS_SELECTOR, ".quantity .plus")
+        def obtener_cantidad():
+            texto = span_cantidad.text
+            return int(texto.split("x")[-1].strip())
 
-            while valor_actual < cantidad_deseada:
-                boton_mas.click()
-                time.sleep(0.3)
-                valor_actual = int(input_cantidad.get_attribute("value"))
+        cantidad_objetivo_mas = random.randint(3, 6)
+        valor_actual = obtener_cantidad()
 
-            assert valor_actual == cantidad_deseada, (
-                f"❌ {nombre}: esperado {cantidad_deseada}, quedó {valor_actual}"
-            )
+        print(f"🔼 Aumentando {nombre} hasta {cantidad_objetivo_mas}...")
+        while valor_actual < cantidad_objetivo_mas:
+            boton_mas.click()
+            time.sleep(0.3)
+            valor_actual = obtener_cantidad()
+        print(f"✅ {nombre} aumentado a {valor_actual}")
+
+        ruta_suma = guardar_captura(driver, "02_aumentado.png")
+        capturas.append(ruta_suma)
+
+        cantidad_objetivo_menos = random.randint(1, valor_actual - 1)
+        print(f"🔽 Disminuyendo {nombre} hasta {cantidad_objetivo_menos}...")
+        while valor_actual > cantidad_objetivo_menos:
+            boton_menos.click()
+            time.sleep(0.3)
+            valor_actual = obtener_cantidad()
+        print(f"✅ {nombre} disminuido a {valor_actual}")
+
+        ruta_resta = guardar_captura(driver, "03_disminuido.png")
+        capturas.append(ruta_resta)
+
+        assert valor_actual == cantidad_objetivo_menos, (
+            f"❌ {nombre}: esperado {cantidad_objetivo_menos}, quedó {valor_actual}"
+        )
 
     except Exception as e:
-        ruta_error = guardar_captura(driver, "error_modificacion_carrito.png")
+        ruta_error = guardar_captura(driver, "error_modificacion.png")
         capturas.append(ruta_error)
-        errores.append(f"❌ Error al modificar cantidades dinámicas: {e}")
-
-    capturas.append(guardar_captura(driver, "modificado.png"))
+        errores.append(f"❌ Error al modificar cantidades con '+/-': {e}")
 
     # -----------------------
     # Eliminar aleatorio
     # -----------------------
     try:
-        filas = driver.find_elements(By.CSS_SELECTOR, "tr.cart_item")
-        assert filas, "No se encontraron filas de productos en el carrito"
+        filas = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li.list-item")))
+        assert filas, "No se encontraron productos en el carrito"
 
-        fila_eliminar = random.choice(filas)
-        nombre_eliminado = fila_eliminar.find_element(By.CSS_SELECTOR, ".product-name").text
-        boton_x = fila_eliminar.find_element(By.CSS_SELECTOR, ".remove")
+        fila = random.choice(filas)
+        nombre = fila.find_element(By.CSS_SELECTOR, "div").text.strip()
+        print(f"➡️ Se trabajará sobre el producto: {nombre}")       
+        boton_remove_all = fila.find_element(By.CSS_SELECTOR, "button[aria-label^='Remove all']")
+        boton_remove_all.click()
+        time.sleep(0.3)  # esperar que el DOM se actualice
 
-        boton_x.click()
-        WebDriverWait(driver, 10).until_not(lambda d: nombre_eliminado in d.page_source)
+
+        # Validar que ya no aparece en el carrito
+        html = driver.page_source
+        assert nombre not in html, f"❌ El producto '{nombre}' sigue apareciendo después de 'Remove all'"
+        print(f"✅ Producto eliminado con 'Remove all': {nombre}")
+
     except Exception as e:
-        ruta_error = guardar_captura(driver, "error_eliminacion.png")
+        ruta_error = guardar_captura(driver, "error_remove_all.png")
         capturas.append(ruta_error)
-        errores.append(f"❌ Error al eliminar producto: {e}")
+        errores.append(f"❌ Error en la fase de eliminación con remove all: {e}")
 
-    capturas.append(guardar_captura(driver, "eliminado.png"))
-
-    # -----------------------
-    # Reporte TXT
-    # -----------------------
-    with open("reporte_prueba.txt", "w", encoding="utf-8") as txt:
-        txt.write(f"Prueba automatizada: Agregar, modificar y eliminar cafés\n\n")
-        txt.write(f"Fecha de ejecución: {fecha}\n")
-        txt.write(f"URL: {URL}\n\n")
-        txt.write("Cafés seleccionados:\n")
-        for nombre, precio in seleccionados:
-            txt.write(f"- {nombre}: {precio}\n")
-        txt.write(f"\nCantidad seleccionada: {cantidad}\n")
-        txt.write("\nAcciones realizadas:\n")
-        txt.write("- Se agregaron los cafés al carrito\n")
-        txt.write("- Se validó su presencia en el carrito\n")
-        txt.write("- Se modificaron las cantidades a valores aleatorios (2–10)\n")
-        txt.write(f"- Se eliminó aleatoriamente usando ❌: {nombre_eliminado}\n")
-        txt.write("- Se validó que el café eliminado ya no esté en el carrito\n\n")
-        if errores:
-            txt.write("Resultado: ❌ Fallos detectados\n")
-            txt.write("Errores:\n")
-            for err in errores:
-                txt.write(f"{err}\n")
-        else:
-            txt.write("Resultado: ✅ Prueba completada exitosamente\n")
-        txt.write("\nCapturas guardadas en carpeta 'capturas':\n")
-        for ruta in capturas:
-            txt.write(f"- {ruta}\n")
+    capturas.append(guardar_captura(driver, "04_eliminado.png"))
 
     # -----------------------
     # Reporte HTML
@@ -188,11 +187,12 @@ def test_cafe_completo(driver):
     <meta charset="UTF-8">
     <title>Reporte de Prueba - Coffee Cart</title>
     <style>
-        body {{ font-family: Arial, sans-serif; margin: 20px; }}
+        body {{ font-family: Arial, sans-serif; margin: 20px; background: #f8f8f8; }}
         h1 {{ color: #4CAF50; }}
         .error {{ color: red; }}
         .exito {{ color: green; }}
-        img {{ margin: 10px 0; border: 1px solid #ccc; }}
+        .accion {{ margin: 15px 0; padding: 10px; background: #fff; border-left: 4px solid #4CAF50; }}
+        img {{ margin: 10px 0; border: 1px solid #ccc; max-width: 500px; display:block; }}
     </style>
 </head>
 <body>
@@ -206,39 +206,62 @@ def test_cafe_completo(driver):
         for nombre, precio in seleccionados:
             html.write(f"<li>{nombre}: {precio}</li>\n")
 
-        html.write(f"""</ul>
-    <h2>Acciones realizadas:</h2>
-    <ul>
-        <li>Se agregaron los cafés al carrito</li>
-        <li>Se validó su presencia en el carrito</li>
-        <li>Se modificaron las cantidades a valores aleatorios (2–10)</li>
-        <li>Se eliminó aleatoriamente usando ❌: {nombre_eliminado}</li>
-        <li>Se validó que el café eliminado ya no esté en el carrito</li>
-    </ul>
-""")
+        html.write("</ul><h2>Acciones realizadas:</h2>")
 
-        if errores:
-            html.write("<p class='error'><strong>Resultado:</strong> ❌ Fallos detectados</p>\n")
-            html.write("<h3>Errores:</h3><ul>\n")
-            for err in errores:
-                html.write(f"<li>{err}</li>\n")
-            html.write("</ul>\n")
-        else:
-            html.write("<p class='exito'><strong>Resultado:</strong> ✅ Prueba completada exitosamente</p>\n")
-
-        html.write("""
-        <h2>Capturas de pantalla:</h2>
-        <ul>
-            <li>Después de agregar cafés:<br><img src='capturas/agregado.png' width='400'></li>
-            <li>Después de modificar cantidades:<br><img src='capturas/modificado.png' width='400'></li>
-            <li>Después de eliminar café:<br><img src='capturas/eliminado.png' width='400'></li>
+        # Acción 1: agregar cafés
+        html.write(f"""
+        <div class='accion'>
+            <p>✅ Se agregaron {cantidad} cafés al carrito.</p>
+            <img src='capturas/01_agregado.png' alt='Agregar cafés'>
+        </div>
         """)
-        if any("error" in ruta for ruta in capturas):
-            for ruta in capturas:
-                if "error" in ruta:
-                    html.write(f"<li>Error:<br><img src='{ruta}' width='400'></li>\n")
+
+        # Acción 2: aumentar cantidad
+        if "02_aumentado.png" in [os.path.basename(r) for r in capturas]:
+            html.write(f"""
+            <div class='accion'>
+                <p>🔼 Se aumentó la cantidad de un café.</p>
+                <img src='capturas/02_aumentado.png' alt='Aumentado'>
+            </div>
+            """)
+
+        # Acción 3: disminuir cantidad
+        if "03_disminuido.png" in [os.path.basename(r) for r in capturas]:
+            html.write(f"""
+            <div class='accion'>
+                <p>📉 Se disminuyó la cantidad del mismo café.</p>
+                <img src='capturas/03_disminuido.png' alt='Disminuido'>
+            </div>
+            """)
+
+        # Acción 4: eliminación
+        html.write(f"""
+        <div class='accion'>
+            <p>🗑️ Se eliminó aleatoriamente el café: <strong>{nombre_eliminado}</strong>.</p>
+            <img src='capturas/04_eliminado.png' alt='Eliminado'>
+        </div>
+        """)
+
+        # Errores
+        if errores:
+            html.write("<h2 class='error'>❌ Fallos detectados</h2><ul>")
+            for err in errores:
+                html.write(f"<li>{err}</li>")
+            html.write("</ul>")
+        else:
+            html.write("<h2 class='exito'>✅ Prueba completada exitosamente</h2>")
+
+        # Capturas adicionales de error
+        for ruta in capturas:
+            if "error" in ruta:
+                html.write(f"""
+                <div class='accion'>
+                    <p class='error'>⚠️ Captura de error:</p>
+                    <img src='{ruta}' alt='Error'>
+                </div>
+                """)
+
         html.write("""
-        </ul>
-    </body>
+</body>
 </html>
 """)

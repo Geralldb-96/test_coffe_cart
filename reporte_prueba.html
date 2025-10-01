@@ -4,52 +4,46 @@
     <meta charset="UTF-8">
     <title>Reporte de Prueba - Coffee Cart</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f8f8f8; }
         h1 { color: #4CAF50; }
         .error { color: red; }
         .exito { color: green; }
-        img { margin: 10px 0; border: 1px solid #ccc; }
+        .accion { margin: 15px 0; padding: 10px; background: #fff; border-left: 4px solid #4CAF50; }
+        img { margin: 10px 0; border: 1px solid #ccc; max-width: 500px; display:block; }
     </style>
 </head>
 <body>
     <h1>Reporte de Prueba Automatizada</h1>
-    <p><strong>Fecha:</strong> 29/09/2025 18:16</p>
+    <p><strong>Fecha:</strong> 30/09/2025 23:07</p>
     <p><strong>URL:</strong> <a href="https://coffee-cart.app/">https://coffee-cart.app/</a></p>
 
-    <h2>Cafés seleccionados (aleatorio = 7):</h2>
+    <h2>Cafés seleccionados (aleatorio = 5):</h2>
     <ul>
 <li>Espresso: $10.00</li>
 <li>Espresso Macchiato: $12.00</li>
 <li>Cappuccino: $19.00</li>
 <li>Mocha: $8.00</li>
 <li>Flat White: $18.00</li>
-<li>Americano: $7.00</li>
-<li>Cafe Latte: $16.00</li>
-</ul>
-    <h2>Acciones realizadas:</h2>
-    <ul>
-        <li>Se agregaron los cafés al carrito</li>
-        <li>Se validó su presencia en el carrito</li>
-        <li>Se modificaron las cantidades a valores aleatorios (2–10)</li>
-        <li>Se eliminó aleatoriamente usando ❌: </li>
-        <li>Se validó que el café eliminado ya no esté en el carrito</li>
-    </ul>
-<p class='error'><strong>Resultado:</strong> ❌ Fallos detectados</p>
-<h3>Errores:</h3><ul>
-<li>❌ Error al modificar cantidades dinámicas: Message: 
-</li>
-<li>❌ Error al eliminar producto: No se encontraron filas de productos en el carrito
-assert []</li>
-</ul>
-
-        <h2>Capturas de pantalla:</h2>
-        <ul>
-            <li>Después de agregar cafés:<br><img src='capturas/agregado.png' width='400'></li>
-            <li>Después de modificar cantidades:<br><img src='capturas/modificado.png' width='400'></li>
-            <li>Después de eliminar café:<br><img src='capturas/eliminado.png' width='400'></li>
-        <li>Error:<br><img src='capturas\error_modificacion_carrito.png' width='400'></li>
-<li>Error:<br><img src='capturas\error_eliminacion.png' width='400'></li>
-
-        </ul>
-    </body>
+</ul><h2>Acciones realizadas:</h2>
+        <div class='accion'>
+            <p>✅ Se agregaron 5 cafés al carrito.</p>
+            <img src='capturas/01_agregado.png' alt='Agregar cafés'>
+        </div>
+        
+            <div class='accion'>
+                <p>🔼 Se aumentó la cantidad de un café.</p>
+                <img src='capturas/02_aumentado.png' alt='Aumentado'>
+            </div>
+            
+            <div class='accion'>
+                <p>📉 Se disminuyó la cantidad del mismo café.</p>
+                <img src='capturas/03_disminuido.png' alt='Disminuido'>
+            </div>
+            
+        <div class='accion'>
+            <p>🗑️ Se eliminó aleatoriamente el café: <strong></strong>.</p>
+            <img src='capturas/04_eliminado.png' alt='Eliminado'>
+        </div>
+        <h2 class='exito'>✅ Prueba completada exitosamente</h2>
+</body>
 </html>
